@@ -6,8 +6,8 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 
 export default function Home() {
-  const [fileData, setFileData] = useState('');
-  
+  const [fileData, setFileData] = useState();
+  const [image, setImage] = useState();
 
   const handleImage = async () => {
     // make sure we have an image file
@@ -19,11 +19,16 @@ export default function Home() {
       }
 
       // send it to the server
-      await fetch('/api/image',{
+      const response = await fetch('/api/image',{
         method:'POST',
         body:JSON.stringify(imageData),
           headers: new Headers({ 'Content-type': 'application/json' }),
       });
+
+      if (response.ok){
+        const data = await response.json();
+        setImage(data.image);
+      }
     }
   }
 
@@ -40,6 +45,7 @@ export default function Home() {
 
       <FileBase64 multiple={false} onDone={setFileData} />
        <input type="button" value="Submit" onClick={handleImage} />
+       {image && <img src={image} />}
       </main>
     </div>
   )

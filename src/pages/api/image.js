@@ -13,7 +13,7 @@ const handler = nc({onError})
     const image = req.body.image;
     const data = Buffer.from(image.slice(image.indexOf(",")), "base64");
     fs.writeFileSync(path.join('./uploads', name), data);
-    res.status(200).end();
+    res.status(200).json({image});
   }
 );
 
